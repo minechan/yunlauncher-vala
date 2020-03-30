@@ -92,29 +92,16 @@ public class MenuWindow : Gtk.Window {
         mainbox.pack_start(stack, true, true, 0);
 
         // ページを作成
-        for (int page = 0; page < (int)Math.ceil(_entries.length() / (COLUMN * ROW)); page++) {
+        for (int page = 0; page <= (int)Math.ceil((_entries.length() - 1) / (COLUMN * ROW)); page++) {
             Gtk.Grid grid = new Gtk.Grid();
             grid.column_spacing = COLUMN;
             grid.row_spacing = ROW;
             for (int y = 0; y < ROW; y++) {
                 for (int x = 0; x < COLUMN; x++) {
-                    int index = page * ((COLUMN + 1) * (ROW + 1)) + y * (ROW + 1) + x;
+                    int index = page * (COLUMN * ROW) + COLUMN * y + x;
                     if (index >= _entries.length()) { break; }
-
                     // ボタンの作成
-                    /*Gtk.Button button = new Gtk.Button();
-                    Gtk.Box buttonbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);*/
                     MenuButton button = new MenuButton(entries.nth_data(index));
-                    
-                    /*button.add(buttonbox);
-                    Gtk.Image buttonicon = new Gtk.Image.from_icon_name(entries.nth_data(index).icon, Gtk.IconSize.DIALOG);
-                    buttonicon.set_pixel_size(48);
-                    buttonbox.pack_start(buttonicon, true, true, 0);
-
-                    Gtk.Label buttonlabel = new Gtk.Label(entries.nth_data(index).name);
-                    buttonlabel.ellipsize = Pango.EllipsizeMode.END;
-                    buttonbox.pack_start(buttonlabel, true, true, 0);*/
-
                     grid.attach(button, x, y, 1, 1);
                 }
             }

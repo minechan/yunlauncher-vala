@@ -1,12 +1,61 @@
 public class Yunlauncher : Object {
 
+    const string STYLE = """* {
+    background-image: none;
+    background-color: transparent;
+    /*color: white;*/
+    border: none;
+    border-radius: 0px;
+    box-shadow: none;
+    text-shadow: none;
+    padding: 0px;
+    margin: 0px;
+    /*transition: all 0s;*/
+    -gtk-icon-effect: none;
+    -gtk-icon-shadow: none;
+    font-size: medium;
+}
+
+decoration {
+    background-color: rgba(255, 255, 255, 0.75);
+    border: rgba(0, 0, 0, 0.5) solid 1px;;
+    box-shadow: rgba(255, 255, 255, 0.5) 1px 1px 0px 0px inset;
+    border-radius: 8px;
+}
+
+entry {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px 8px 0px 0px;
+    padding: 0px 10px;
+}
+
+grid {
+    padding: 10px;
+}
+
+grid > button {
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    color: black;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 0px;
+    min-width: 110px;
+    min-height: 70px;
+    transition: all 0.2s ease-out;
+}
+    
+grid > button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 10px -10px;
+}""";
+
     const int FINDING_HEADER = 0;
     const int FINDING_TAGS = 1;
 
     public static int main(string[] args) {
         // 言語の取得
         string lang = Environment.get_variable("LANG").split("_")[0];
-        stdout.printf(@"Hello, world!\n言語は$lang\n");
+        // stdout.printf(@"Hello, world!\n言語は$lang\n");
 
         // デスクトップエントリの列挙
         string path = "/usr/share/applications/";
@@ -18,7 +67,8 @@ public class Yunlauncher : Object {
             FileInfo info;
             while ((info = enumerator.next_file()) != null) {
                 string name = info.get_name();
-                if (info.get_file_type() == FileType.REGULAR && name.contains(".desktop"))
+                // if (info.get_file_type() == FileType.REGULAR && name.contains(".desktop"))
+                if (name.contains(".desktop"))
                     filenames.append(path + name);
             }
         } catch (Error e) {
@@ -104,13 +154,13 @@ public class Yunlauncher : Object {
         entries.sort(comparefunc);
 
         /*foreach (DesktopEntry i in entries) {
-            stdout.printf("%s\n%s\n%s\n%s\n\n", i.name, i.comment, i.icon, i.exec);
+            stdout.printf("%s\n", i.name);
         }*/
 
         // ウィンドウの表示
         Gtk.init(ref args);
         Gtk.CssProvider cssprovider = new Gtk.CssProvider();
-        cssprovider.load_from_path("/home/mine/Programming/launcher/custom.css");
+        cssprovider.load_from_data(STYLE);
         Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), cssprovider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         MenuWindow window = new MenuWindow(entries);
         Gtk.main();

@@ -50,6 +50,8 @@ public class DesktopEntry : Object {
 // メニュー用ブタンのクラス
 public class MenuButton : Gtk.Button {
 
+    private string _exec = "";
+
     public MenuButton(DesktopEntry entry) {
         Gtk.Box buttonbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
         this.add(buttonbox);
@@ -60,6 +62,14 @@ public class MenuButton : Gtk.Button {
         Gtk.Label buttonlabel = new Gtk.Label(entry.name);
         buttonlabel.ellipsize = Pango.EllipsizeMode.END;
         buttonbox.pack_start(buttonlabel, true, true, 0);
+
+        _exec = entry.exec;
+        this.clicked.connect(this.onclicked);
+    }
+
+    private void onclicked(Gtk.Button button) {
+        Process.spawn_command_line_async(_exec);
+        Gtk.main_quit();
     }
 }
 

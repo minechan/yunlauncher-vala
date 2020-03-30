@@ -133,8 +133,10 @@ grid > button:hover {
                     }
                 }
                 // リストに追加
-                if (!nodisplay)
+                if (!nodisplay) {
+                    exec = exec.replace(" %F", "").replace(" %f", "").replace(" %U", "").replace(" %u", "");
                     entries.append(new DesktopEntry(name, comment, icon, exec));
+                }
             } catch (Error e) {
                 stderr.printf("%s\n", e.message);
                 return 1;
